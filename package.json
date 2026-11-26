@@ -1,0 +1,24 @@
+{
+  "name": "strive",
+  "version": "1.2.0",
+  "description": "Strive — твой трекер финансов и привычек",
+  "main": "main.js",
+  "author": "Strive",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win --publish never"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.strive.app",
+    "productName": "Strive",
+    "files": ["main.js", "preload.js", "index.html", "app.js", "config.js", "style.css", "manifest.json", "icon.svg", "icon-192.png", "icon-512.png"],
+    "win": { "target": ["nsis", "portable"], "icon": "icon-512.png" },
+    "nsis": { "oneClick": false, "allowToChangeInstallationDirectory": true, "artifactName": "Strive-Setup-${version}.exe" },
+    "portable": { "artifactName": "Strive-Portable-${version}.exe" }
+  }
+}

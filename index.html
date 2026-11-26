@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Strive — твой трекер финансов и привычек</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg">
+<meta name="theme-color" content="#0b1e4a">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="splash" aria-hidden="true">
+  <svg viewBox="0 0 512 512" class="sp-logo">
+    <defs>
+      <linearGradient id="spbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1b44a3"/><stop offset="1" stop-color="#0a1c47"/></linearGradient>
+      <linearGradient id="sps" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#8fb4ff"/></linearGradient>
+    </defs>
+    <rect width="512" height="512" rx="112" fill="url(#spbg)"/>
+    <path class="sp-s" pathLength="1" d="M348 168 C312 112 178 112 176 192 C174 272 346 244 344 328 C342 404 206 408 160 340" fill="none" stroke="url(#sps)" stroke-width="58" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle class="sp-dot" cx="372" cy="128" r="20" fill="#5b8cff"/>
+  </svg>
+  <div class="sp-name">Stri<i>ve</i></div>
+  <div class="sp-tag">Твой трекер финансов и привычек</div>
+</div>
+<main>
+<header>
+  <div><h1>Stri<i>ve</i></h1><div class="sub">Твой трекер финансов и привычек</div></div>
+  <div class="stat"><b id="pct">0%</b>на сегодня</div>
+</header>
+<div class="bar"><div id="fill"></div></div>
+<nav class="nav" id="nav"><button data-v="tasks" class="on">Задачи</button><button data-v="habits">Привычки</button><button data-v="fin">Финансы</button><button data-v="exams">Экзамены</button></nav>
+
+<section id="v-tasks">
+<form id="f">
+  <label>Что нужно сделать
+    <input id="title" required maxlength="120" placeholder="Например: сдать лабу по Python">
+  </label>
+  <div class="row">
+    <label>Дата <input id="date" type="date"></label>
+    <label>Время <input id="time" type="time"></label>
+  </div>
+  <div class="row">
+    <label>Напомнить
+      <select id="rem">
+        <option value="0">В момент срока</option>
+        <option value="10">За 10 минут</option>
+        <option value="60">За 1 час</option>
+        <option value="-1">Не напоминать</option>
+      </select>
+    </label>
+    <label>Повтор
+      <select id="rep"><option value="">Без повтора</option><option value="d">Каждый день</option><option value="w">Каждую неделю</option></select>
+    </label>
+  </div>
+  <div class="m">В назначенное время приложение зазвонит и спросит: сделано или нет.</div>
+  <button class="add" type="submit">Добавить задачу</button>
+</form>
+
+<div class="tabs" id="tabs">
+  <button data-f="today" class="on">Сегодня</button>
+  <button data-f="all">Все</button>
+  <button data-f="done">Готово</button>
+</div>
+<ul id="list"></ul>
+</section>
+
+<section id="v-habits" hidden>
+  <form id="hf"><label>Новая привычка<input id="hname" required maxlength="60" placeholder="Например: читать 20 минут"></label><label>Напомнить в (необязательно)<input id="htime" type="time"></label><div class="m">В это время приложение зазвонит и спросит, сделал(а) ли ты привычку.</div><button class="add" type="submit">Добавить</button></form>
+  <ul id="hlist"></ul>
+</section>
+
+<section id="v-fin" hidden>
+  <div class="mon"><button id="fprev" type="button" aria-label="Предыдущий месяц">‹</button><b id="fmon"></b><button id="fnext" type="button" aria-label="Следующий месяц">›</button></div>
+  <div id="finc"></div>
+  <div id="fsum" class="fsum"></div>
+  <div id="fsum2" class="fsum two"></div>
+  <form id="ff">
+    <label>Что потратил?<input id="fq" required autocomplete="off" placeholder="Например: еда 200, игротека 300"></label>
+    <div id="fchips" class="chips"></div>
+    <div class="row">
+      <label>Дата<input id="fdate" type="date" required></label>
+      <button class="add" type="submit" style="align-self:end">Добавить</button>
+    </div>
+    <div id="fmsg" class="m" role="status"></div>
+    <div class="m">Пиши как удобно: «еда 200», «200 такси», несколько через запятую. Доп. доход: «+5000 подработка».</div>
+  </form>
+  <h3 class="sec">Расходы по категориям</h3>
+  <div id="fcats"></div>
+  <h3 class="sec">Расходы по дням</h3>
+  <div id="fdays" class="chart"></div>
+  <h3 class="sec">Последние 6 месяцев</h3>
+  <div id="fchart" class="chart"></div>
+  <h3 class="sec">Операции</h3>
+  <ul id="flist"></ul>
+</section>
+
+<section id="v-exams" hidden>
+  <form id="ef">
+    <div class="row">
+      <label>Тип<select id="etype"><option>Экзамен</option><option>Зачёт</option><option>Проект</option><option>Реферат</option><option>Курсовая</option><option>Другое</option></select></label>
+      <label>Дата сдачи<input id="edate" type="date" required></label>
+    </div>
+    <label>Название<input id="ename" required maxlength="80" placeholder="Например: матан"></label>
+    <label>Оценка (можно позже)<input id="egrade" maxlength="12" placeholder="Например: 5 или 87"></label>
+    <button class="add" type="submit">Добавить</button>
+  </form>
+  <div id="elist"></div>
+</section>
+
+<div class="foot">
+  <span id="perm"></span>
+  <span id="sync"></span>
+  <button id="accbtn" type="button" hidden>Войти</button>
+  <button id="theme" type="button">Сменить тему</button>
+</div>
+</main>
+<div id="auth"><div class="card">
+  <h2>Вход в Strive</h2>
+  <p class="m">Войди, чтобы задачи и привычки синхронизировались между телефоном и ПК.</p>
+  <input id="em" type="email" placeholder="Email" autocomplete="email">
+  <input id="pw" type="password" placeholder="Пароль (от 6 символов)" autocomplete="current-password">
+  <div class="row"><button class="add" id="bin" type="button">Войти</button><button class="add alt" id="bup" type="button">Регистрация</button></div>
+  <div id="amsg" class="m" role="status"></div>
+  <button id="skip" class="lnk" type="button">Продолжить без аккаунта</button>
+</div></div>
+<div id="ask" role="alertdialog" aria-modal="true"><div class="card">
+  <div class="bell">🔔</div>
+  <h2 id="ask-t"></h2>
+  <p class="m" id="ask-m"></p>
+  <div class="askbtns"><button class="add ok" id="ask-y" type="button"></button><button class="add no" id="ask-n" type="button"></button></div>
+  <button id="ask-l" class="lnk" type="button">Напомнить через 10 минут</button>
+  <div id="ask-q" class="m"></div>
+</div></div>
+<div id="toast" role="alert"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+<script>
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function(){});
+</script>
+</body>
+</html>
